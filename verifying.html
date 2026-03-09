@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>যাচাই করা হচ্ছে</title>
+<style>
+body{
+  font-family:Arial;
+  background:#f5f6f8;
+  text-align:center;
+  padding:40px;
+}
+.loader{
+  border:6px solid #eee;
+  border-top:6px solid #1e88ff;
+  border-radius:50%;
+  width:50px;
+  height:50px;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
+@keyframes spin{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+button{
+  margin:10px;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+}
+.success{background:#28a745;}
+.error{background:#e53935;}
+</style>
+</head>
+<body>
+
+<h2>যাচাই করা হচ্ছে...</h2>
+<div class="loader"></div>
+
+<br>
+<button class="success" onclick="goSuccess()">Success</button>
+<button class="error" onclick="goError()">Error</button>
+
+<script>
+function goSuccess(){ window.location.href="success.html"; }
+function goError(){ window.location.href="error.html"; }
+</script>
+
+</body>
+</html>
