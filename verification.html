@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নিরাপত্তা যাচাই</title>
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+.card{
+  background:white;
+  width:360px;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+h2{
+  margin-bottom:5px;
+}
+
+p{
+  font-size:14px;
+  color:#555;
+}
+
+.code-box{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:20px;
+}
+
+.code-box input{
+  width:55px;
+  height:55px;
+  font-size:24px;
+  text-align:center;
+  border-radius:12px;
+  border:1px solid #ddd;
+  background:#eef1f5;
+}
+
+.timer{
+  margin-top:20px;
+  font-size:14px;
+  color:#777;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h2>নিরাপত্তা যাচাই</h2>
+<p>৪ সংখ্যার কোড লিখুন</p>
+
+<div class="code-box">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+<input maxlength="1">
+</div>
+
+<div class="timer">দয়া করে অপেক্ষা করুন <span id="time">30</span> সেকেন্ড</div>
+</div>
+
+<script>
+let inputs=document.querySelectorAll(".code-box input");
+inputs.forEach((input,index)=>{
+  input.addEventListener("input", ()=>{
+    if(input.value.length===1 && index<3){
+      inputs[index+1].focus();
+    }
+    if(index===3 && input.value.length===1){
+      setTimeout(()=>window.location.href="verifying.html",500);
+    }
+  });
+});
+
+// ৩০ সেকেন্ড টাইমার
+let time=30;
+let timer=setInterval(()=>{
+  time--;
+  document.getElementById("time").innerText=time;
+  if(time<=0){
+    clearInterval(timer);
+    document.querySelector(".timer").innerText="এখন কোড লিখতে পারবেন";
+  }
+},1000);
+</script>
+</body>
+</html>
